@@ -1,19 +1,19 @@
 'use strict';
 
-{
+(() => {
+    class ClockDrawer {
+        constructor(canvas) {
+            this.ctx = canvas.getContext('2d');
+            this.width = canvas.width;
+            this.height = canvas.height;
+        }
+    }
     class Clock {
-        constructor() {
+        constructor(drawer) {
             this.r = 100;
+            this.drawer = drawer;
         }
         drawFace() {
-            const canvas = document.querySelector('canvas');
-            if (typeof canvas.getContext === "undefined") {
-                return;
-            }
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-
             for (let angle=0; angle < 360; angle+=6){
                 ctx.save();
 
@@ -41,6 +41,12 @@
             this.drawFace();
         }
     }
-    const clock = new Clock();
+
+    const canvas = document.querySelector('canvas');
+    if (typeof canvas.getContext === "undefined") {
+        return;
+    }
+
+    const clock = new Clock(new ClockDrawer(canvas));
     clock.run();
-}
+})();
