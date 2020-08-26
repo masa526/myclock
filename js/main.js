@@ -7,6 +7,17 @@
             this.width = canvas.width;
             this.height = canvas.height;
         }
+
+        draw(angle, func) {
+            this.ctx.save();
+
+            this.ctx.translate(this.width / 2, this.height / 2);
+            this.ctx.rotate(Math.PI / 180 * angle);
+            this.ctx.beginPath();
+            func(this.ctx);
+            this.ctx.stroke();
+            this.ctx.restore();
+        }
     }
     class Clock {
         constructor(drawer) {
@@ -15,25 +26,20 @@
         }
         drawFace() {
             for (let angle=0; angle < 360; angle+=6){
-                ctx.save();
+                this.drawer.draw(angle, ctx => {
+                    
+                    ctx.moveTo(0, -this.r);
+                    if (angle % 30 == 0) {
+                        ctx.lineWidth = 2;
+                        ctx.lineTo(0, -this.r + 10);
+                        ctx.font = '13px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(angle / 30 || 12, 0, -this.r + 25);
+                    } else {
+                        ctx.lineTo(0, -this.r + 5);
+                    }
+                });
 
-                ctx.translate(width / 2, height / 2);
-                ctx.rotate(Math.PI / 180 * angle);
-
-                ctx.beginPath();
-                ctx.moveTo(0, -this.r);
-                if (angle % 30 == 0) {
-                    ctx.lineWidth = 2;
-                    ctx.lineTo(0, -this.r + 10);
-                    ctx.font = '13px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(angle / 30 || 12, 0, -this.r + 25);
-                } else {
-                    ctx.lineTo(0, -this.r + 5);
-                }
-                ctx.stroke();
-
-                ctx.restore();
             }
 
         }
