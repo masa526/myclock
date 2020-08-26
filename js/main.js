@@ -18,15 +18,15 @@
             this.ctx.stroke();
             this.ctx.restore();
         }
+
+        clear() {
+            this.ctx.clearRect(0, 0, this.width, this.height);
+        }
     }
     class Clock {
         constructor(drawer) {
             this.r = 100;
             this.drawer = drawer;
-
-            this.h = (new Date()).getHours();
-            this.m = (new Date()).getMinutes();
-            this.s = (new Date()).getSeconds();
         }
         drawFace() {
             for (let angle=0; angle < 360; angle+=6){
@@ -66,9 +66,22 @@
             });
         }
 
+        update() {
+            this.h = (new Date()).getHours();
+            this.m = (new Date()).getMinutes();
+            this.s = (new Date()).getSeconds();
+        }
+
         run() {
+            this.update();
+
+            this.drawer.clear();
             this.drawFace();
             this.drawHands();
+
+            setTimeout(() => {
+                this.run();
+            }, 100);
         }
     }
 
